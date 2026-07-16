@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Abeeha's Bakeout</title>
+  <link rel="icon" type="image/png" href="../images/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="./admin.css">
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader" class="page-loader">
+    <div class="loader-content">
+      <div class="loader-text">Loading Admin 🔐</div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Wrap -->
+  <div id="admin-wrap" style="display: none;">
+    <!-- HEADER -->
+    <header class="admin-header">
+      <div class="ah-left">
+        <a href="../index.html" class="back-home-btn">← Back to Site</a>
+        <h1 className="admin-title">Admin Dashboard</h1>
+        <p className="admin-subtitle">Abeeha's Bakeout Control Panel</p>
+      </div>
+      <button class="logout-btn" onclick="handleLogout()">Sign Out 🚪</button>
+    </header>
+
+    <div class="sec-rule" style="margin: 20px 0 30px;"></div>
+
+    <!-- TABS -->
+    <div class="menu-tabs">
+      <button class="menu-tab active" id="tabBtn-reviews" onclick="switchTab('reviews')">💬 Moderate Reviews</button>
+      <button class="menu-tab" id="tabBtn-pricing" onclick="switchTab('pricing')">💸 Calculator Prices</button>
+      <button class="menu-tab" id="tabBtn-gallery" onclick="switchTab('gallery')">🖼️ Gallery Manager</button>
+    </div>
+
+    <!-- REVIEWS MODERATION PANEL -->
+    <div class="admin-panel active" id="panel-reviews">
+      <h3 class="panel-heading">Manage Customer Feedback</h3>
+      <div id="reviews-list-container" class="admin-list-container">
+        <p>Loading reviews...</p>
+      </div>
+    </div>
+
+    <!-- CAKE PRICING PANEL -->
+    <div class="admin-panel" id="panel-pricing">
+      <h3 class="panel-heading">Adjust Calculator Pricing</h3>
+      <p class="panel-sub">Modify the starting prices of each flavor shown in the Cake Calculator and Menu list.</p>
+      <div id="pricing-list-container" class="admin-list-container">
+        <p>Loading pricing list...</p>
+      </div>
+    </div>
+
+    <!-- GALLERY MANAGER PANEL -->
+    <div class="admin-panel" id="panel-gallery">
+      <h3 class="panel-heading">Add Gallery Designs</h3>
+      <p class="panel-sub">Upload new designs dynamically to the cake gallery.</p>
+      
+      <!-- Upload form -->
+      <form id="upload-form" class="rv-form-wrap" onsubmit="handleUploadImage(event)" style="margin: 0 0 40px; padding: 24px;">
+        <div style="font-weight: bold; font-size: 18px; color: var(--gold-l); margin-bottom: 16px;">Upload New Design</div>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="rv-field">
+            <label>Design Caption</label>
+            <input type="text" id="newCaption" placeholder="e.g. Princess Crown Cake" required />
+          </div>
+          <div class="rv-field">
+            <label>Select Image File</label>
+            <input type="file" id="galleryFileInput" accept="image/*" required />
+          </div>
+          <button type="submit" class="rv-submit" id="uploadBtn">Upload Design ↗</button>
+        </div>
+      </form>
+
+      <h3 class="panel-heading" style="font-size: 18px; margin-bottom: 16px;">Currently Uploaded Dynamic Images</h3>
+      <div id="gallery-list-container" class="admin-gallery-grid">
+        <p>Loading gallery items...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGIN CARD -->
+  <div id="login-wrap" style="display: none;">
+    <div class="rv-form-wrap" style="max-width: 400px; width: 100%; margin: 120px auto 40px;">
+      <div class="rv-form-title" style="text-align: center; margin-bottom: 8px;">Admin Dashboard 🔐</div>
+      <div class="rv-form-sub" style="text-align: center; margin-bottom: 24px;">Log in to access database configuration</div>
+      
+      <form onsubmit="handleLogin(event)" style="display: flex; flex-direction: column; gap: 16px;">
+        <div class="rv-field">
+          <label>Username / Email</label>
+          <input type="text" id="loginEmail" placeholder="e.g. admin" required />
+        </div>
+        
+        <div class="rv-field">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required />
+        </div>
+        
+        <button type="submit" class="rv-submit" id="loginBtn" style="margin-top: 12px;">Access Dashboard ↗</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../supabase.js"></script>
+  <script src="./admin.js"></script>
+</body>
+</html>

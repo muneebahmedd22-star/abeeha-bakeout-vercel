@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abeeha's Bakeout — Delight in Every Bite</title>
+  <link rel="icon" type="image/png" href="./images/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./index.css">
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  
+  <!-- ── PAGE LOADER ── -->
+  <div id="loader" class="page-loader">
+    <div class="loader-content">
+      <div class="loader-cake">
+        <svg viewBox="0 0 100 100" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 70 h60 v15 a5 5 0 0 1 -5 5 h-50 a5 5 0 0 1 -5 -5 z" fill="none" stroke="#e8c97e" stroke-width="2" class="shimmer-stroke"/>
+          <path d="M25 45 h50 v25 h-50 z" fill="none" stroke="#e8c97e" stroke-width="2" class="shimmer-stroke"/>
+          <path d="M35 25 h30 v20 h-30 z" fill="none" stroke="#e8c97e" stroke-width="2" class="shimmer-stroke"/>
+          <line x1="50" y1="13" x2="50" y2="25" stroke="#e8a0b4" stroke-width="2" stroke-linecap="round"/>
+          <path d="M50 5 Q48 10 50 13 Q52 10 50 5" fill="#e8c97e" class="flame-flicker"/>
+        </svg>
+      </div>
+      <div class="loader-text">Abeeha's Bakeout</div>
+      <div class="loader-sub">Delight in Every Bite</div>
+    </div>
+  </div>
+
+
+  <!-- ── NAV ── -->
+  <nav id="mainNav">
+    <a class="nav-logo" href="#home">
+      <img
+        src="./images/logo.png"
+        alt="Abeeha's Bakeout" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#gallery" onclick="showGallery(event)">Gallery</a></li>
+      <li><a href="#calculator" onclick="showCalculator(event)">Calculator</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#reviews" onclick="showReviews(event)">Reviews</a></li>
+
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact">Order</a></li>
+      <li><a href="./admin/" style="color: var(--gold); font-weight: bold;">Admin 🔐</a></li>
+    </ul>
+    <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Switch Theme" style="margin-right: 15px;">
+      <span class="sun-icon">☀️</span>
+      <span class="moon-icon">🌙</span>
+    </button>
+    <a href="https://instagram.com/abeehas_bakeout" target="_blank" class="nav-cta">Order Now ↗</a>
+    <div class="hamburger" id="hbg" onclick="toggleMob()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+  <div class="mob-menu" id="mobMenu">
+    <a href="#home" onclick="closeMob()">Home</a>
+    <a href="#gallery" onclick="showGallery(event); closeMob();">Gallery</a>
+    <a href="#calculator" onclick="showCalculator(event); closeMob();">Calculator</a>
+    <a href="#menu" onclick="closeMob()">Menu</a>
+    <a href="#reviews" onclick="showReviews(event); closeMob();">Reviews</a>
+
+    <a href="#faq" onclick="closeMob()">FAQ</a>
+    <a href="#contact" onclick="closeMob()">Order Now</a>
+    <a href="./admin/" onclick="closeMob()" style="color: var(--gold); font-weight: bold;">Admin Panel 🔐</a>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Switch Theme" style="margin-top: 15px; align-self: flex-start;">
+      <span class="sun-icon">☀️ Light</span>
+      <span class="moon-icon">🌙 Dark</span>
+    </button>
+  </div>
+
+  <!-- ── HERO ── -->
+  <section id="home">
+    <div class="shimmer-line" style="position:absolute;top:0;left:0;right:0;"></div>
+    <div class="particles" id="particles"></div>
+    <div class="hero-logo-wrap fu">
+      <img
+        src="./images/logo.png"
+        alt="Abeeha's Bakeout" />
+    </div>
+    <div class="hero-eyebrow fu d1">Handcrafted with Love · Since 2019</div>
+    <div class="hero-brand fu d1">Abeeha's</div>
+    <div class="hero-script fu d1">Bakeout ♡</div>
+    <div class="gold-rule" style="width:460px;max-width:80vw;margin:20px auto 0;"></div>
+    <div class="hero-tag fu d2">♥ Customized Cakes &amp; Sweet Creations ♥</div>
+    <div class="trust-row fu d2">
+      <div class="trust-box"><span class="tb-n">500+</span><span class="tb-l">Happy Customers</span></div>
+      <div class="trust-box"><span class="tb-n">2019</span><span class="tb-l">Est. Since</span></div>
+      <div class="trust-box"><span class="tb-n">100%</span><span class="tb-l">Customizable</span></div>
+    </div>
+    <div class="hero-pg fu d3">
+      <div class="hp">
+        <div class="hp-s">½ Pound</div>
+        <div class="hp-f">Starting from</div>
+        <div class="hp-p"><span class="rs">Rs.</span>600</div>
+      </div>
+      <div class="hp">
+        <div class="hp-s">1 Pound</div>
+        <div class="hp-f">Starting from</div>
+        <div class="hp-p"><span class="rs">Rs.</span>1,000</div>
+      </div>
+      <div class="hp">
+        <div class="hp-s">2 Pounds</div>
+        <div class="hp-f">Starting from</div>
+        <div class="hp-p"><span class="rs">Rs.</span>2,000</div>
+      </div>
+      <div class="hp">
+        <div class="hp-s">3 Pounds</div>
+        <div class="hp-f">Starting from</div>
+        <div class="hp-p"><span class="rs">Rs.</span>2,800</div>
+      </div>
+    </div>
+    <div class="cpill fu d4">♥ Customization Charges Apply ♥</div>
+    <div class="scroll-cue"><span>Scroll</span>
+      <div class="arr"></div>
+    </div>
+  </section>
+
+  <!-- ── GALLERY ── -->
+  <!-- ── FEATURED GALLERY PREVIEW ── -->
+  <section id="gallery-preview">
+    <div class="wrap">
+      <span class="eyebrow fu">Highlights</span>
+      <div class="sec-h fu d1">Our Best Creations</div>
+      <div class="sec-sc fu d1">Delightful masterpieces made just for you ♡</div>
+      <div class="sec-rule fu d2"></div>
+
+      <div class="preview-grid">
+        <div class="gi" onclick="openLb(0)"><img
+            src="./images/html_img_2_2.jpeg"
+            alt="Butterfly Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Pink Butterfly Cake</span></div>
+        </div>
+        <div class="gi" onclick="openLb(1)"><img
+            src="./images/html_img_3_3.jpeg"
+            alt="Maa Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Maa — With Love</span></div>
+        </div>
+        <div class="gi" onclick="openLb(2)"><img
+            src="./images/html_img_4_4.jpeg"
+            alt="Sheep Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Cute Lamb Cake</span></div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 35px;">
+        <button class="view-all-btn" onclick="showGallery(event)">View Full Gallery (10+ Designs) ↗</button>
+      </div>
+    </div>
+  </section>
+  <div id="gallery">
+    <div class="wrap">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;">
+        <div>
+          <span class="eyebrow fu">Our Creations</span>
+          <div class="sec-h fu d1">Made with Love</div>
+          <div class="sec-sc fu d1">&amp; Craft ♡</div>
+        </div>
+        <button class="close-gal-btn" onclick="closeGallery()">Close Gallery ×</button>
+      </div>
+      <div class="sec-rule fu d2"></div>
+      <div class="gal-grid fu">
+        <div class="gi" onclick="openLb(0)"><img
+            src="./images/html_img_2_2.jpeg"
+            alt="Butterfly Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Pink Butterfly Cake</span></div>
+        </div>
+        <div class="gi" onclick="openLb(1)"><img
+            src="./images/html_img_3_3.jpeg"
+            alt="Maa Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Maa — With Love</span></div>
+        </div>
+        <div class="gi" onclick="openLb(2)"><img
+            src="./images/html_img_4_4.jpeg"
+            alt="Sheep Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Cute Lamb Cake</span></div>
+        </div>
+        <div class="gi" onclick="openLb(3)"><img
+            src="./images/html_img_8_8.jpeg"
+            alt="Graduation Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Graduation Cake</span></div>
+        </div>
+        <div class="gi" onclick="openLb(4)"><img
+            src="./images/html_img_9_9.jpeg"
+            alt="Custom Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Custom Story Cake</span></div>
+        </div>
+        <div class="gi" onclick="openLb(5)"><img
+            src="./images/html_img_10_10.jpeg"
+            alt="Abdulwasay Birthday Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Abdulwasay Birthday Cake</span></div>
+        </div>
+        <div class="gi" onclick="openLb(6)"><img
+            src="./images/html_img_11_11.jpeg"
+            alt="KitKat Drip Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">KitKat Chocolate Drip Cake</span></div>
+        </div>
+        <div class="gi" onclick="openLb(7)"><img
+            src="./images/html_img_12_12.jpeg"
+            alt="2-Tier Floral Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">2-Tier Floral Cake</span></div>
+        </div>
+                <div class="gi" onclick="openLb(8)"><img
+            src="./images/html_img_13_13.jpeg"
+            alt="Hello Kitty Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Hello Kitty 1st Birthday Cake</span></div>
+        </div>
+        <div class="gi" onclick="openLb(9)"><img
+            src="./images/html_img_14_14.jpeg"
+            alt="Bunny Roses Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Cute Bunny Roses Cake</span></div>
+        </div>
+        <div class="gi" onclick="openLb(10)"><img
+            src="./images/html_img_15_15.jpeg"
+            alt="Chocolate Heart Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Chocolate Heart Curls Cake</span></div>
+        </div>
+        <div class="gi" onclick="openLb(11)"><img
+            src="./images/html_img_16_16.jpeg"
+            alt="Anniversary Cupcakes" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Happy Anniversary Cupcakes</span></div>
+        </div>
+        <div class="gi" onclick="openLb(12)"><img
+            src="./images/html_img_17_17.jpeg"
+            alt="Car Cake" loading="lazy" />
+          <div class="gi-ov"><span class="gi-tag">Lightning McQueen Car Cake</span></div>
+        </div>
+<div class="gi gi-ph" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+          <div class="gi-ph-icon">🎂</div>
+          <div class="gi-ph-text">Your cake<br>next?</div>
+          <div class="gi-ph-sub">DM to Order</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LIGHTBOX ── -->
+  <div class="lightbox" id="lightbox" onclick="closeLbOutside(event)">
+    <button class="lb-prev" onclick="lbNav(-1)">‹</button>
+    <div class="lb-inner" id="lbInner">
+      <button class="lb-close" onclick="closeLb()">×</button>
+      <img id="lbImg" src="" alt="" />
+      <div class="lb-caption" id="lbCaption"></div>
+      <div class="lb-dots" id="lbDots"></div>
+    </div>
+    <button class="lb-next" onclick="lbNav(1)">›</button>
+  </div>
+
+
+  <!-- ── CAKE CALCULATOR ── -->
+  <div id="calculator">
+    <div class="wrap calc-wrap">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;">
+        <div>
+          <span class="eyebrow fu">Plan Your Order</span>
+          <div class="sec-h fu d1">Cake Calculator</div>
+          <div class="sec-sc fu d1">find your price ♡</div>
+        </div>
+        <button class="close-calc-btn" onclick="closeCalculator()">Close Calculator ×</button>
+      </div>
+      <div class="sec-rule fu d2"></div>
+
+      <div class="calc-box fu">
+
+        <!-- SIZE -->
+        <div class="calc-section">
+          <span class="calc-label">Step 1 — Choose Size</span>
+          <div class="pill-row">
+            <button class="calc-pill selected" onclick="calcSelect('size', this, '½ lb')">½ Pound</button>
+            <button class="calc-pill" onclick="calcSelect('size', this, '1 lb')">1 Pound</button>
+            <button class="calc-pill" onclick="calcSelect('size', this, '2 lb')">2 Pounds</button>
+            <button class="calc-pill" onclick="calcSelect('size', this, '3 lb')">3 Pounds</button>
+          </div>
+        </div>
+
+        <!-- FLAVOUR -->
+        <div class="calc-section">
+          <span class="calc-label">Step 2 — Choose Flavour</span>
+          <div class="pill-row">
+            <button class="calc-pill selected" onclick="calcSelect('flavour', this, 'vanilla')">Vanilla</button>
+            <button class="calc-pill" onclick="calcSelect('flavour', this, 'chocolate')">Chocolate Cream</button>
+            <button class="calc-pill" onclick="calcSelect('flavour', this, 'caramel')">Caramel</button>
+            <button class="calc-pill" onclick="calcSelect('flavour', this, 'pineapple')">Pineapple</button>
+            <button class="calc-pill" onclick="calcSelect('flavour', this, 'redvelvet')">Red Velvet</button>
+            <button class="calc-pill" onclick="calcSelect('flavour', this, 'fudge')">Chocolate Fudge</button>
+            <button class="calc-pill" onclick="calcSelect('flavour', this, 'walmond')">Walmond Fudge</button>
+            <button class="calc-pill" onclick="calcSelect('flavour', this, 'oreo')">Oreo Drip</button>
+          </div>
+        </div>
+
+        <!-- RESULT -->
+        <div class="calc-result">
+          <div class="cr-left">
+            <div class="cr-label">Estimated Price</div>
+            <div class="cr-desc" id="calcDesc">Vanilla Cake · ½ Pound</div>
+            <div class="cr-note">* Customization charges may apply</div>
+          </div>
+          <div>
+            <div class="cr-price"><span class="cr-rs">Rs. </span><span id="calcPrice">600</span></div>
+          </div>
+          <a href="https://instagram.com/abeehas_bakeout" target="_blank" class="cr-order-btn">
+            Order This ↗
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MENU ── -->
+  <div id="menu">
+    <div class="wrap">
+      <span class="eyebrow fu">Price List</span>
+      <div class="sec-h fu d1">Our Menu</div>
+      <div class="sec-sc fu d1">made fresh daily ♡</div>
+      <div class="sec-rule fu d2"></div>
+
+      <div class="menu-tabs fu">
+        <button class="menu-tab active" onclick="showTab('cakes',this)">🎂 Cakes</button>
+        <button class="menu-tab" onclick="showTab('fudge',this)">🍫 Fudge Cakes</button>
+        <button class="menu-tab" onclick="showTab('brownies',this)">🟫 Brownies</button>
+        <button class="menu-tab" onclick="showTab('cupcakes',this)">🧁 Cupcakes</button>
+      </div>
+
+      <!-- CAKES -->
+      <div class="menu-panel active fu" id="cakes">
+        <div class="menu-card">
+          <div class="mc-name">Vanilla Cake</div>
+          <div class="mc-sizes">
+            <div class="mc-row"><span class="mc-lbl">Per Pound</span><span class="mc-price">Rs. 1,000</span></div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="mc-name">Chocolate Cream Cake</div>
+          <div class="mc-sizes">
+            <div class="mc-row"><span class="mc-lbl">Per Pound</span><span class="mc-price">Rs. 1,100</span></div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="mc-name">Caramel Cake</div>
+          <div class="mc-sizes">
+            <div class="mc-row"><span class="mc-lbl">Per Pound</span><span class="mc-price">Rs. 1,100</span></div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="mc-name">Pineapple Cake</div>
+          <div class="mc-sizes">
+            <div class="mc-row"><span class="mc-lbl">Per Pound</span><span class="mc-price">Rs. 1,000</span></div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="mc-name">Red Velvet Cake</div>
+          <div class="mc-sizes">
+            <div class="mc-row"><span class="mc-lbl">Half Pound</span><span class="mc-price">Rs. 1,000</span></div>
+            <div class="mc-divider"></div>
+            <div class="mc-row"><span class="mc-lbl">1 Pound</span><span class="mc-price">Rs. 2,000</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FUDGE CAKES -->
+      <div class="menu-panel" id="fudge">
+        <div class="menu-card">
+          <div class="mc-name">Chocolate Fudge</div>
+          <div class="mc-sizes">
+            <div class="mc-row"><span class="mc-lbl">Half Pound</span><span class="mc-price">Rs. 800</span></div>
+            <div class="mc-divider"></div>
+            <div class="mc-row"><span class="mc-lbl">1 Pound</span><span class="mc-price">Rs. 1,500</span></div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="mc-name">Walmond Fudge Cake</div>
+          <div class="mc-sizes">
+            <div class="mc-row"><span class="mc-lbl">Half Pound</span><span class="mc-price">Rs. 900</span></div>
+            <div class="mc-divider"></div>
+            <div class="mc-row"><span class="mc-lbl">1 Pound</span><span class="mc-price">Rs. 1,600</span></div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="mc-name">Oreo Choc Drip Cake</div>
+          <div class="mc-sizes">
+            <div class="mc-row"><span class="mc-lbl">Half Pound</span><span class="mc-price">Rs. 750</span></div>
+            <div class="mc-divider"></div>
+            <div class="mc-row"><span class="mc-lbl">1 Pound</span><span class="mc-price">Rs. 1,000</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BROWNIES -->
+      <div class="menu-panel" id="brownies">
+        <div class="menu-card">
+          <div class="mc-name">Fudge Brownie</div>
+          <div class="mc-sizes">
+            <div class="mc-row"><span class="mc-lbl">3×3 · 6 Pieces</span><span class="mc-price">Rs. 1,200</span></div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="mc-name">Simple Brownie</div>
+          <div class="mc-sizes">
+            <div class="mc-row"><span class="mc-lbl">3×3 · 6 Pieces</span><span class="mc-price">Rs. 1,000</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CUPCAKES -->
+      <div class="menu-panel" id="cupcakes">
+        <div class="menu-card">
+          <div class="mc-name">Vanilla Cupcake</div>
+          <div class="mc-sizes">
+            <div class="mc-row"><span class="mc-lbl">Pack of 3</span><span class="mc-price">Rs. 450</span></div>
+            <div class="mc-divider"></div>
+            <div class="mc-row"><span class="mc-lbl">Pack of 6</span><span class="mc-price">Rs. 900</span></div>
+          </div>
+        </div>
+        <div class="menu-card">
+          <div class="mc-name">Chocolate Cupcake</div>
+          <div class="mc-sizes">
+            <div class="mc-row"><span class="mc-lbl">Pack of 3</span><span class="mc-price">Rs. 500</span></div>
+            <div class="mc-divider"></div>
+            <div class="mc-row"><span class="mc-lbl">Pack of 6</span><span class="mc-price">Rs. 1,000</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-note-pill fu"><span>♥ All cakes 100% customizable · Customization charges apply</span></div>
+    </div>
+  </div>
+
+
+  <!-- ── REVIEWS ── -->
+  <div id="reviews">
+    <div class="wrap">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;">
+        <div>
+          <span class="eyebrow fu">What They Say</span>
+          <div class="sec-h fu d1">Customer Reviews</div>
+          <div class="sec-sc fu d1">real words, real love ♡</div>
+        </div>
+        <button class="close-rv-btn" onclick="closeReviews()">Close Reviews ×</button>
+      </div>
+      <div class="sec-rule fu d2"></div>
+
+      <!-- Overall Score -->
+      <div class="rv-overall fu">
+        <div class="rv-big-score">4.9</div>
+        <div>
+          <div class="rv-big-stars">★★★★★</div>
+          <div class="rv-summary-text">500+ Orders · Since 2019</div>
+        </div>
+      </div>
+
+      <!-- Reviews Grid — pre-loaded + dynamic -->
+      <div class="reviews-slider-container fu"><div class="reviews-grid" id="reviewsGrid">
+
+        <!-- F1 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Ordered a custom birthday cake — it looked exactly like I described. Everyone at the party
+            loved it."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">A</div>
+            <div>
+              <div class="rv-name">Ayesha Malik</div>
+              <div class="rv-date">Lahore · May 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F2 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Bohot acha cake tha yaar, red velvet liya tha — taste bilkul fresh tha aur delivery bhi
+            time pe thi. Definitely order karungi dobara."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">S</div>
+            <div>
+              <div class="rv-name">Sana Tariq</div>
+              <div class="rv-date">Lahore · March 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- M1 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Got the chocolate fudge cake for my wife's birthday. She was really happy. Great taste and
+            great design."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-m">U</div>
+            <div>
+              <div class="rv-name">Usman Ahmed</div>
+              <div class="rv-date">Lahore · April 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F3 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"2-tier cake order ki thi engagement ke liye — wallah itni sundar thi ke sab ne photos li.
+            Taste bhi mast tha."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">M</div>
+            <div>
+              <div class="rv-name">Mahnoor Baig</div>
+              <div class="rv-date">Lahore · January 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F4 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★☆</div>
+          <p class="rv-text">"The butterfly cake was exactly what I wanted for my daughter. Very creative and the cream
+            was light and fresh."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">Z</div>
+            <div>
+              <div class="rv-name">Zainab Raza</div>
+              <div class="rv-date">Lahore · February 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- M2 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Brownie pack mangwaya tha — yaar seriously itna acha tha. Fudgy, rich, not too sweet. Har
+            hafte order karna chahta hun."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-m">H</div>
+            <div>
+              <div class="rv-name">Hamza Qureshi</div>
+              <div class="rv-date">Lahore · May 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F5 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Ordered a custom theme cake for my son's birthday. The fondant figures were so detailed.
+            Loved every bit of it."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">N</div>
+            <div>
+              <div class="rv-name">Nadia Hussain</div>
+              <div class="rv-date">Lahore · April 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- M3 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"KitKat drip cake liya tha — presentation ekdum pro level thi. 2 din pehle order diya aur
+            time pe aa gaya."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-m">B</div>
+            <div>
+              <div class="rv-name">Bilal Chaudhry</div>
+              <div class="rv-date">Lahore · March 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F6 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Cupcakes office event ke liye order ki thin — sab ne puchha kahan se li hain. Taste aur
+            presentation dono perfect."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">F</div>
+            <div>
+              <div class="rv-name">Fatima Iqbal</div>
+              <div class="rv-date">Lahore · February 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F7 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Caramel cake and brownie pack together — both were so fresh and well-packed. Very happy
+            with the whole experience."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">R</div>
+            <div>
+              <div class="rv-name">Rimsha Khan</div>
+              <div class="rv-date">Lahore · January 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- M4 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Ammi ne order ki thi floral tier cake — quality dekh ke genuinely surprised hua. Bohot
+            professional kaam tha."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-m">A</div>
+            <div>
+              <div class="rv-name">Ali Hassan</div>
+              <div class="rv-date">Lahore · May 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F8 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Honest review — taste real mein acha hai aur design bilkul waisa aaya jaise DM pe discuss
+            kiya tha. Koi complaint nahi."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">H</div>
+            <div>
+              <div class="rv-name">Hira Nawaz</div>
+              <div class="rv-date">Lahore · April 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F9 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Pineapple cake liya tha — itna light aur fresh tha ke ghar wale sab khush ho gaye.
+            Packaging bhi neat thi."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">U</div>
+            <div>
+              <div class="rv-name">Urooj Fatima</div>
+              <div class="rv-date">Lahore · June 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F10 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Ordered a sheep-shaped cake for Eid — it was absolutely adorable and tasted amazing. Will
+            definitely order again!"</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">A</div>
+            <div>
+              <div class="rv-name">Amna Shahid</div>
+              <div class="rv-date">Lahore · April 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- M5 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Bhai ne recommend kiya tha — pehli baar order kiya walmond fudge cake. Sach mein best
+            decision tha. Cream bilkul perfect thi."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-m">S</div>
+            <div>
+              <div class="rv-name">Saad Mirza</div>
+              <div class="rv-date">Lahore · March 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F11 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Chocolate cupcakes mangwaye the — pack of 6 liye the aur sab khatam bhi ho gaye 10 minute
+            mein. Next time zyada lungi."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">K</div>
+            <div>
+              <div class="rv-name">Kiran Aslam</div>
+              <div class="rv-date">Lahore · May 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F12 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Got a graduation cake made — the Squidward design was hilarious and perfect. Everyone at
+            the party was impressed."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">T</div>
+            <div>
+              <div class="rv-name">Tooba Arshad</div>
+              <div class="rv-date">Lahore · February 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- M6 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★☆</div>
+          <p class="rv-text">"Good quality aur reasonable prices. Vanilla cake ordered — ghar pe sab ko pasand aaya.
+            Thoda aur decoration hota toh 5 star deta."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-m">O</div>
+            <div>
+              <div class="rv-name">Omar Farooq</div>
+              <div class="rv-date">Lahore · January 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F13 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Oreo chocolate drip cake — I have no words. It was stunning and tasted even better than it
+            looked. 10/10 recommend."</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">L</div>
+            <div>
+              <div class="rv-name">Laiba Yousaf</div>
+              <div class="rv-date">Lahore · June 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- F14 -->
+        <div class="rv-card">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text">"Meri ammi ki birthday thi — special message wali cake order ki. Unki aankhein bhar aa gai
+            dekh ke. Thank you Abeeha's Bakeout!"</p>
+          <div class="rv-footer">
+            <div class="rv-avatar rv-f">D</div>
+            <div>
+              <div class="rv-name">Dua Rehman</div>
+              <div class="rv-date">Lahore · May 2025</div>
+            </div>
+            <div class="rv-verified">✦ Verified</div>
+          </div>
+        </div>
+
+        <!-- Dynamic reviews from storage will be injected here -->
+        <div id="dynamicReviews"></div>
+
+      </div>
+ 
+      </div>
+      <!-- Slider Controls -->
+      <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 40px;">
+        <button class="rv-nav-btn" onclick="slideReviews(-1)">‹</button>
+        <button class="rv-nav-btn" onclick="slideReviews(1)">›</button>
+      </div>
+      </div>
+  <!-- ── REVIEW SUBMISSION FORM ── -->
+      <div class="rv-form-wrap fu">
+        <div class="rv-form-title">Share Your Experience ♡</div>
+        <div class="rv-form-sub">Ordered from us? Leave a review below — it means the world to us!</div>
+
+        <!-- Star Rating Selector -->
+        <div class="star-selector" id="starSelector">
+          <button class="star-btn" data-val="1" onclick="setStars(1)">★</button>
+          <button class="star-btn" data-val="2" onclick="setStars(2)">★</button>
+          <button class="star-btn" data-val="3" onclick="setStars(3)">★</button>
+          <button class="star-btn" data-val="4" onclick="setStars(4)">★</button>
+          <button class="star-btn" data-val="5" onclick="setStars(5)">★</button>
+        </div>
+
+        <div class="rv-fields">
+          <div class="rv-field">
+            <label>Your Name</label>
+            <input type="text" id="rvName" placeholder="e.g. Ayesha Khan" maxlength="40" />
+          </div>
+          <div class="rv-field">
+            <label>City</label>
+            <input type="text" id="rvCity" placeholder="e.g. Lahore" maxlength="30" />
+          </div>
+        </div>
+
+        <textarea class="rv-textarea" id="rvText"
+          placeholder="Share your experience — English ya Roman Urdu dono chalti hain ♡" maxlength="300"></textarea>
+
+        <button class="rv-submit" id="rvSubmitBtn" onclick="submitReview()">Submit Review ♡</button>
+
+        <div class="rv-success" id="rvSuccess">
+          ✦ Shukriya! Aapka review submit ho gaya. ♡
+        </div>
+        <p class="rv-note">
+          Your review will appear on this page instantly.<br>
+          No account needed — just your honest words.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── WHY US ── -->
+  <div id="why">
+    <div class="wrap">
+      <span class="eyebrow fu">Why Choose Us</span>
+      <div class="sec-h fu d1">Baked with Heart</div>
+      <div class="sec-sc fu d1">always ♡</div>
+      <div class="sec-rule fu d2"></div>
+      <div class="features-row fu">
+        <div class="feature-card">
+          <div class="fi">🌿</div>
+          <div class="ft">Fresh Ingredients</div>
+          <p class="fd">Every cake is made with the freshest, highest-quality ingredients — no preservatives, no
+            shortcuts.</p>
+        </div>
+        <div class="feature-card">
+          <div class="fi">🎨</div>
+          <div class="ft">Custom Designs</div>
+          <p class="fd">From cartoon characters to elegant florals — we bring your vision to life with beautiful custom
+            cakes.</p>
+        </div>
+        <div class="feature-card">
+          <div class="fi">💝</div>
+          <div class="ft">Made with Love</div>
+          <p class="fd">Every creation is baked with passion and care, ensuring an unforgettable taste experience since
+            2019.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ── FAQ ── -->
+  <div id="faq">
+    <div class="wrap">
+      <span class="eyebrow fu">Got Questions?</span>
+      <div class="sec-h fu d1">FAQ</div>
+      <div class="sec-sc fu d1">we've got answers ♡</div>
+      <div class="sec-rule fu d2"></div>
+
+      <div class="faq-list fu">
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">Kitne din pehle order karna hoga?</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-a">
+            <p>Kam az kam <strong>2 se 3 din pehle</strong> order dein. Fondant aur tier cakes ke liye <strong>4 se 5
+                din</strong> chahiye hote hain. Urgent orders possible nahi hote isliye please advance booking karein.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">How do I place an order?</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-a">
+            <p>Simply <strong>DM us on Instagram</strong> @abeehas_bakeout. Share your theme, flavour, size, and
+              required date — we'll confirm availability and guide you from there.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">Delivery available hai?</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-a">
+            <p>Haan, <strong>delivery available hai</strong> request pe. Delivery charges location ke hisaab se alag
+              hoti hain. Order karte waqt apna area batayein aur hum confirm kar denge.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">Can I customize the design completely?</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-a">
+            <p>Absolutely! All our cakes are <strong>100% customizable</strong>. Share your reference photo or idea over
+              Instagram DM and we'll bring your vision to life. Custom design charges apply depending on complexity.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">Payment kaise karna hoga?</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-a">
+            <p>Payment ke details order confirm hone ke baad <strong>DM pe share</strong> ki jayengi. Advance payment
+              required hoti hai booking confirm karne ke liye.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">Are the ingredients fresh?</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-a">
+            <p>Yes — <strong>every cake is made fresh to order</strong>. We use high-quality ingredients with no
+              preservatives. Each order is baked on the day of delivery or pickup.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">Minimum order kya hai?</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-a">
+            <p>Cakes ke liye minimum <strong>½ pound</strong> hai. Brownies ke liye minimum <strong>6 pieces (1
+                pack)</strong> hai. Cupcakes minimum <strong>pack of 3</strong> se order ho sakti hain.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CONTACT ── -->
+  <div id="contact">
+    <div class="wrap">
+      <span class="eyebrow fu">Get in touch</span>
+      <div class="sec-h fu d1">Order Now</div>
+      <div class="sec-sc fu d1">we'd love to bake for you ♡</div>
+      <div class="sec-rule fu d2"></div>
+      <div class="contact-grid fu">
+        <div>
+          <div class="c-info-blocks">
+            <div class="cib"><span class="cib-icon">📷</span>
+              <div>
+                <div class="cib-lbl">Instagram</div>
+                <div class="cib-val">@abeehas_bakeout</div>
+              </div>
+            </div>
+            <div class="cib"><span class="cib-icon">🎂</span>
+              <div>
+                <div class="cib-lbl">Speciality</div>
+                <div class="cib-val">100% Customized Cakes</div>
+              </div>
+            </div>
+            <div class="cib"><span class="cib-icon">📅</span>
+              <div>
+                <div class="cib-lbl">Advance Booking</div>
+                <div class="cib-val">Minimum 1–2 days</div>
+              </div>
+            </div>
+            <div class="cib"><span class="cib-icon">🚗</span>
+              <div>
+                <div class="cib-lbl">Delivery</div>
+                <div class="cib-val">Available on request</div>
+              </div>
+            </div>
+          </div>
+          <div class="steps">
+            <div class="steps-hd">How to Order</div>
+            <div class="step">
+              <div class="step-n">1</div>
+              <div>
+                <div class="step-title">DM on Instagram</div>
+                <div class="step-desc">Scan the QR or message @abeehas_bakeout directly</div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-n">2</div>
+              <div>
+                <div class="step-title">Share Your Vision</div>
+                <div class="step-desc">Tell us your theme, flavour, size &amp; date</div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-n">3</div>
+              <div>
+                <div class="step-title">We Confirm &amp; Bake</div>
+                <div class="step-desc">We confirm availability and start baking with love!</div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-n">4</div>
+              <div>
+                <div class="step-title">Enjoy Your Cake ♡</div>
+                <div class="step-desc">Pickup or delivery — your perfect cake awaits!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qr-card">
+          <img
+            src="./images/html_img_18_18.png"
+            alt="Scan to Order" class="qr-img" />
+          <div class="qr-scan-lbl">Scan to Order</div>
+          <div class="qr-handle">📷 @abeehas_bakeout</div>
+          <div class="qr-divider"></div>
+          <div class="qr-pills">
+            <span class="qp">Made with Love</span>
+            <span class="qp">Fresh Ingredients</span>
+            <span class="qp">Since 2019</span>
+            <span class="qp">500+ Customers</span>
+          </div>
+          <a href="https://instagram.com/abeehas_bakeout" target="_blank" class="ig-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
+            Visit Instagram ↗
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-logo"><img
+        src="./images/logo.png"
+        alt="Abeeha's Bakeout" /></div>
+    <div class="footer-tag">Delight in Every Bite</div>
+    <div class="footer-pills">
+      <span class="fp2">Made with Love</span>
+      <span class="fp2">Fresh Ingredients</span>
+      <span class="fp2">Baked to Perfection</span>
+      <span class="fp2">Since 2019</span>
+      <span class="fp2">500+ Happy Customers</span>
+    </div>
+    <div class="footer-copy">© 2026 Abeeha's Bakeout · @abeehas_bakeout</div>
+  </footer>
+  <!-- Back to Top -->
+  <button class="btt" id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+
+  <!-- ── FLOATING ORDER BUTTON ── -->
+  <div class="fab">
+    <div class="fab-tooltip">Order on Instagram</div>
+    <div class="fab-wrap">
+      <a href="https://instagram.com/abeehas_bakeout" target="_blank" class="fab-main" title="Order Now">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+        </svg>
+      </a>
+      <div class="fab-badge">♡</div>
+    </div>
+  </div>
+
+  
+
+  
+  <script src="./supabase.js"></script>
+  <script src="./index.js"></script>
+</body>
+</html>

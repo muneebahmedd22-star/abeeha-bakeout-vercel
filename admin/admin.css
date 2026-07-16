@@ -1,0 +1,134 @@
+/* ══════════════════════════════════════
+   ADMIN SPECIFIC STYLES
+══════════════════════════════════════ */
+body {
+  background: var(--black);
+  color: var(--cream);
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+#admin-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.back-home-btn {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 8px;
+  transition: color 0.3s;
+}
+
+.back-home-btn:hover {
+  color: var(--gold-l);
+}
+
+.admin-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  margin: 0;
+  color: var(--gold-l);
+}
+
+.admin-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 4px 0 0;
+  letter-spacing: 1px;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid var(--pink);
+  color: var(--pink);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  background: var(--pink);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(232, 112, 144, 0.4);
+}
+
+.admin-panel {
+  display: none;
+}
+
+.admin-panel.active {
+  display: block;
+  animation: fadeIn 0.4s ease;
+}
+
+.panel-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--gold-l);
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.panel-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+.admin-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.badge-approved {
+  font-size: 10px;
+  background: rgba(76, 201, 130, 0.15);
+  color: #4cc982;
+  padding: 2px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.badge-pending {
+  font-size: 10px;
+  background: rgba(201, 76, 76, 0.15);
+  color: #c94c4c;
+  padding: 2px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
