@@ -2,6 +2,6 @@
   "name": "abeeha-bakeout-vercel",
   "version": "1.0.0",
   "scripts": {
-    "build": "echo 'No build command needed for static files'"
+    "build": "mkdir -p dist && cp index.html index.css index.js supabase.js dist/ && cp -r images admin dist/"
   }
 }

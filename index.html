@@ -9,6 +9,15 @@
   <link rel="stylesheet" href="./index.css">
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Open Graph / Meta Cards -->
+  <meta name="description" content="Baked with love, crafted with care. Get premium handcrafted custom cakes, cupcakes, brownies and more in Lahore.">
+  <meta property="og:title" content="Abeeha's Bakeout — Delight in Every Bite">
+  <meta property="og:description" content="Baked with love, crafted with care. Get premium handcrafted custom cakes, cupcakes, brownies and more in Lahore.">
+  <meta property="og:image" content="https://abeehasbakeout.vercel.app/images/logo.png">
+  <meta property="og:url" content="https://abeehasbakeout.vercel.app">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
   
@@ -46,7 +55,6 @@
 
       <li><a href="#faq">FAQ</a></li>
       <li><a href="#contact">Order</a></li>
-      <li><a href="./admin/" style="color: var(--gold); font-weight: bold;">Admin 🔐</a></li>
     </ul>
     <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Switch Theme" style="margin-right: 15px;">
       <span class="sun-icon">☀️</span>
@@ -66,7 +74,6 @@
 
     <a href="#faq" onclick="closeMob()">FAQ</a>
     <a href="#contact" onclick="closeMob()">Order Now</a>
-    <a href="./admin/" onclick="closeMob()" style="color: var(--gold); font-weight: bold;">Admin Panel 🔐</a>
     <button class="theme-toggle" onclick="toggleTheme()" title="Switch Theme" style="margin-top: 15px; align-self: flex-start;">
       <span class="sun-icon">☀️ Light</span>
       <span class="moon-icon">🌙 Dark</span>
@@ -275,6 +282,24 @@
             <button class="calc-pill" onclick="calcSelect('size', this, '2 lb')">2 Pounds</button>
             <button class="calc-pill" onclick="calcSelect('size', this, '3 lb')">3 Pounds</button>
           </div>
+          
+          <!-- SIZE VISUALIZER -->
+          <div id="size-visualizer" style="display: flex; align-items: center; gap: 20px; margin: 20px 0 10px; padding: 15px; background: rgba(201, 168, 76, 0.05); border: 1px dashed rgba(201, 168, 76, 0.2); border-radius: 8px;">
+            <div class="visualizer-cake-container" style="position: relative; width: 80px; height: 60px; display: flex; align-items: flex-end; justify-content: center; border-bottom: 2px solid rgba(201, 168, 76, 0.2); padding-bottom: 2px;">
+              <div id="visCake" style="width: 32px; height: 20px; background: linear-gradient(135deg, var(--gold), var(--gold-d)); border-radius: 4px; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                <!-- Cream Drip -->
+                <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--pink); border-top-left-radius: 4px; border-top-right-radius: 4px;"></div>
+                <!-- Candle -->
+                <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 2px; height: 10px; background: var(--pink);">
+                  <div style="position: absolute; top: -4px; left: -1px; width: 4px; height: 4px; background: var(--gold-l); border-radius: 50%; box-shadow: 0 0 8px var(--gold);"></div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div id="visServing" style="font-weight: bold; font-size: 14px; color: var(--gold-l); font-family: 'Montserrat', sans-serif;">Serves 2-3 people 👥</div>
+              <div id="visDimensions" style="font-size: 11px; color: var(--muted); margin-top: 4px; font-family: 'Montserrat', sans-serif;">4" diameter · Single layer cake</div>
+            </div>
+          </div>
         </div>
 
         <!-- FLAVOUR -->
@@ -305,9 +330,60 @@
           <a href="https://instagram.com/abeehas_bakeout" target="_blank" class="cr-order-btn">
             Order This ↗
           </a>
+          <!-- Copy & Download Receipt -->
+          <div style="display: flex; gap: 10px; width: 100%; margin-top: 15px; flex-wrap: wrap;">
+            <button onclick="copyEstimate()" class="cr-order-btn" style="background: transparent; border: 1px solid var(--gold); color: var(--gold-l); flex: 1; min-width: 140px; padding: 10px; font-size: 11px;">
+              Copy Estimate 📋
+            </button>
+            <button onclick="downloadEstimate()" class="cr-order-btn" style="background: transparent; border: 1px solid var(--gold); color: var(--gold-l); flex: 1; min-width: 140px; padding: 10px; font-size: 11px;">
+              Download Receipt 📄
+            </button>
+          </div>
         </div>
 
       </div>
+    </div>
+  </div>
+
+  <!-- ── CUSTOM THEME INQUIRY FORM ── -->
+  <div id="custom-inquiry" style="margin-top: 50px;">
+    <div class="wrap">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;">
+        <div>
+          <span class="eyebrow fu">Have a Design?</span>
+          <div class="sec-h fu d1">Share Your Theme</div>
+          <div class="sec-sc fu d1">upload your reference design here ♡</div>
+        </div>
+      </div>
+      <div class="sec-rule fu d2"></div>
+
+      <form id="inquiry-form" class="rv-form-wrap fu" onsubmit="submitCustomInquiry(event)" style="padding: 30px; margin-top: 30px;">
+        <div class="rv-fields">
+          <div class="rv-field">
+            <label>Your Name</label>
+            <input type="text" id="inqName" placeholder="e.g. Sana Khan" required />
+          </div>
+          <div class="rv-field">
+            <label>WhatsApp / Phone Number</label>
+            <input type="tel" id="inqPhone" placeholder="e.g. 03001234567" required />
+          </div>
+        </div>
+        <div class="rv-fields" style="margin-top: 10px;">
+          <div class="rv-field">
+            <label>Required Delivery Date</label>
+            <input type="date" id="inqDate" required style="background: var(--dark2); color: var(--cream); border: 1px solid var(--gold); padding: 8px; border-radius: 4px; font-family: 'Montserrat', sans-serif;" />
+          </div>
+          <div class="rv-field">
+            <label>Upload Reference Design (Image)</label>
+            <input type="file" id="inqFile" accept="image/*" required />
+          </div>
+        </div>
+        <div class="rv-field" style="margin-top: 15px;">
+          <label>Specific Instructions / Design Requirements</label>
+          <textarea id="inqText" class="rv-textarea" placeholder="Type specific instructions (e.g. colour palette, names to write, custom details)..." required style="height: 100px;"></textarea>
+        </div>
+        <button type="submit" class="rv-submit" id="inqSubmitBtn" style="margin-top: 15px;">Submit Custom Inquiry ↗</button>
+      </form>
     </div>
   </div>
 
@@ -1061,6 +1137,31 @@
   
 
   
+  <!-- Success Review Modal Popup -->
+  <div class="lightbox" id="review-success-modal" onclick="closeReviewSuccessModal(event)">
+    <div class="lb-inner" style="max-width: 400px; background: var(--dark-bg); border: 1px solid var(--gold); border-radius: 12px; padding: 30px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.8); pointer-events: auto;">
+      <div style="font-size: 50px; margin-bottom: 15px; animation: bounce 1.5s infinite;">💖</div>
+      <h3 style="color: var(--gold-l); font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 10px;">Review Submitted!</h3>
+      <p style="color: var(--cream); font-size: 14px; line-height: 1.5; margin-bottom: 20px;">Shukriya! Your review has been submitted successfully for moderation. It will show up on the website once approved by Abeeha's Bakeout! ♡</p>
+      <button onclick="closeReviewSuccessModal(event)" class="cr-order-btn" style="width: 100%; padding: 12px; font-weight: bold; background: linear-gradient(135deg, var(--gold), var(--gold-d)); border: none; color: #fff; cursor: pointer; border-radius: 8px;">Awesome ↗</button>
+    </div>
+  </div>
+
+  <!-- Success Inquiry Modal Popup -->
+  <div class="lightbox" id="inquiry-success-modal">
+    <div class="lb-inner" style="max-width: 400px; background: var(--dark-bg); border: 1px solid var(--gold); border-radius: 12px; padding: 30px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.8); pointer-events: auto;">
+      <div style="font-size: 50px; margin-bottom: 15px; animation: bounce 1.5s infinite;">🎉</div>
+      <h3 style="color: var(--gold-l); font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 10px;">Inquiry Submitted!</h3>
+      <p style="color: var(--cream); font-size: 14px; line-height: 1.5; margin-bottom: 20px;">Your details and reference design have been submitted successfully! You are now being redirected to Instagram to chat with us. ♡</p>
+      <div class="loader-cake" style="margin: 0 auto 15px; display: inline-block;">
+        <svg viewBox="0 0 100 100" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="40" stroke="#c9a84c" stroke-width="4" fill="none" stroke-dasharray="180" class="shimmer-stroke" style="animation: rotate 2s linear infinite;"/>
+        </svg>
+      </div>
+      <p style="color: var(--muted); font-size: 11px; margin: 0;">Redirecting in 3 seconds...</p>
+    </div>
+  </div>
+
   <script src="./supabase.js"></script>
   <script src="./index.js"></script>
 </body>

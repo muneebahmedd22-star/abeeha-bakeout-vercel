@@ -781,30 +781,36 @@
       gap: 14px;
     }
 
-    /* first item wide */
-    .gi:nth-child(1) {
+    /* first item wide inside full gallery */
+    .gal-grid .gi:nth-child(1) {
       grid-column: span 2;
       aspect-ratio: 16/9;
     }
 
-    .gi:nth-child(2) {
+    .gal-grid .gi:nth-child(2) {
       aspect-ratio: 1/1;
     }
 
-    .gi:nth-child(3) {
+    .gal-grid .gi:nth-child(3) {
       aspect-ratio: 1/1;
     }
 
-    .gi:nth-child(4) {
+    .gal-grid .gi:nth-child(4) {
       aspect-ratio: 1/1;
     }
 
-    .gi:nth-child(5) {
+    .gal-grid .gi:nth-child(5) {
       aspect-ratio: 16/10;
     }
 
-    .gi:nth-child(6) {
+    .gal-grid .gi:nth-child(6) {
       aspect-ratio: 1/1;
+    }
+
+    /* highlights cards force square grid */
+    .preview-grid .gi {
+      aspect-ratio: 1/1 !important;
+      grid-column: span 1 !important;
     }
 
     .gi {
@@ -925,10 +931,14 @@
       background: rgba(0, 0, 0, 0);
       backdrop-filter: blur(0px);
       pointer-events: none;
-      transition: background 0.4s, backdrop-filter 0.4s;
+      opacity: 0;
+      visibility: hidden;
+      transition: background 0.4s, backdrop-filter 0.4s, opacity 0.4s, visibility 0.4s;
     }
 
     .lightbox.open {
+      opacity: 1;
+      visibility: visible;
       background: rgba(0, 0, 0, 0.92);
       backdrop-filter: blur(16px);
       pointer-events: all;

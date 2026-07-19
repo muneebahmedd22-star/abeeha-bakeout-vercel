@@ -121,10 +121,20 @@ function renderGalleryGrid() {
   
   if (previewGrid) {
     let previewHtml = '';
-    const highlights = lbData.slice(0, 3);
-    highlights.forEach((item, index) => {
+    
+    // Find all items where featured is true
+    let highlights = lbData.filter(item => item.featured === true);
+    
+    // If no items are marked as featured in the database, fall back to first 3 items
+    if (highlights.length === 0) {
+      highlights = lbData.slice(0, 3);
+    }
+    
+    highlights.forEach((item) => {
+      // Find the correct index of this item in the full lbData array
+      const originalIndex = lbData.indexOf(item);
       previewHtml += `
-        <div class="gi" onclick="openLb(${index})">
+        <div class="gi" onclick="openLb(${originalIndex})">
           <img src="${item.src}" alt="${item.caption}" loading="lazy" />
           <div class="gi-ov"><span class="gi-tag">${item.caption}</span></div>
         </div>
@@ -147,8 +157,10 @@ async function loadDynamicGallery() {
     if (data && data.length > 0) {
       const dbImages = data.map(item => ({
         src: item.src,
-        caption: item.caption
+        caption: item.caption,
+        featured: item.featured === true || item.featured === 'true'
       }));
+      // Merge with default images (defaults aren't featured by default, except we can manually match)
       lbData = [...dbImages, ...DEFAULT_IMAGES];
     }
   } catch (err) {
@@ -277,21 +289,146 @@ async function submitReview() {
 
     if (error) throw error;
 
-    document.getElementById('rvSuccess').classList.add('show');
+    const modal = document.getElementById('review-success-modal');
+    if (modal) modal.classList.add('open');
     document.getElementById('rvName').value = '';
     document.getElementById('rvCity').value = '';
     document.getElementById('rvText').value = '';
     setStars(5);
-
-    setTimeout(() => {
-      document.getElementById('rvSuccess').classList.remove('show');
-    }, 5000);
   } catch (err) {
     alert("Review submission failed: " + err.message);
   } finally {
     btn.disabled = false;
     btn.textContent = 'Submit Review ♡';
   }
+}
+
+function closeReviewSuccessModal(e) {
+  if (e) e.stopPropagation();
+  const modal = document.getElementById('review-success-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+// ------------------ CALCULATOR SHARE & DOWNLOAD ------------------
+function copyEstimate() {
+  const { size, flavour } = calcState;
+  const price = calcPrices[flavour]?.[size] || 600;
+  const name = calcNames[flavour] || 'Cake';
+  
+  const text = `🎂 Abeeha's Bakeout Cake Estimate\n` +
+               `-------------------------------\n` +
+               `Cake Design: ${name}\n` +
+               `Cake Size  : ${size}\n` +
+               `Estimated Base Price: Rs. ${price.toLocaleString()}\n` +
+               `-------------------------------\n` +
+               `* Note: Customization charges apply based on custom design details.\n` +
+               `Order link: https://instagram.com/abeehas_bakeout`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Estimate copied to clipboard! 📋');
+  }).catch(err => {
+    alert('Could not copy text: ' + err.message);
+  });
+}
+
+function downloadEstimate() {
+  const { size, flavour } = calcState;
+  const price = calcPrices[flavour]?.[size] || 600;
+  const name = calcNames[flavour] || 'Cake';
+
+  // Create temporary canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = 500;
+  canvas.height = 650;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#0c0c0e';
+  ctx.fillRect(0, 0, 500, 650);
+
+  // Border Gold Accent
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(20, 20, 460, 610);
+  ctx.strokeStyle = 'rgba(201, 168, 76, 0.2)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(26, 26, 448, 598);
+
+  // Header Title
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = 'bold 28px Georgia';
+  ctx.textAlign = 'center';
+  ctx.fillText("Abeeha's Bakeout", 250, 90);
+
+  ctx.fillStyle = '#e8a0b4';
+  ctx.font = 'italic 16px "Great Vibes", cursive';
+  ctx.fillText("delight in every bite", 250, 120);
+
+  // Receipt Label
+  ctx.fillStyle = '#f5f5f7';
+  ctx.font = 'bold 16px Montserrat';
+  ctx.fillText("ORDER ESTIMATE RECEIPT", 250, 180);
+
+  // Line separator
+  ctx.strokeStyle = 'rgba(201, 168, 76, 0.3)';
+  ctx.beginPath();
+  ctx.moveTo(50, 210);
+  ctx.lineTo(450, 210);
+  ctx.stroke();
+
+  // Receipt Data
+  ctx.textAlign = 'left';
+  ctx.font = '14px Montserrat';
+  ctx.fillStyle = '#b5b5ba';
+  
+  ctx.fillText("Date Generated:", 60, 250);
+  ctx.fillStyle = '#f5f5f7';
+  ctx.fillText(new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }), 240, 250);
+
+  ctx.fillStyle = '#b5b5ba';
+  ctx.fillText("Cake Design   :", 60, 300);
+  ctx.fillStyle = '#f5f5f7';
+  ctx.font = 'bold 14px Montserrat';
+  ctx.fillText(name, 240, 300);
+
+  ctx.font = '14px Montserrat';
+  ctx.fillStyle = '#b5b5ba';
+  ctx.fillText("Cake Size     :", 60, 350);
+  ctx.fillStyle = '#f5f5f7';
+  ctx.fillText(size, 240, 350);
+
+  ctx.fillStyle = '#b5b5ba';
+  ctx.fillText("Base Price    :", 60, 400);
+  ctx.fillStyle = '#f5f5f7';
+  ctx.fillText("Rs. " + price.toLocaleString(), 240, 400);
+
+  // Line separator
+  ctx.strokeStyle = 'rgba(201, 168, 76, 0.3)';
+  ctx.beginPath();
+  ctx.moveTo(50, 450);
+  ctx.lineTo(450, 450);
+  ctx.stroke();
+
+  // Estimated Total
+  ctx.font = 'bold 16px Montserrat';
+  ctx.fillStyle = '#c9a84c';
+  ctx.fillText("Estimated Base Total:", 60, 490);
+  ctx.fillStyle = '#c9a84c';
+  ctx.textAlign = 'right';
+  ctx.fillText("Rs. " + price.toLocaleString(), 440, 490);
+
+  // Footer Note
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#8e8e93';
+  ctx.font = 'italic 11px Montserrat';
+  ctx.fillText("* Customization charges are calculated separately based on cake design complexity.", 250, 560);
+  ctx.fillText("DM us on Instagram (@abeehas_bakeout) with this receipt to confirm your booking!", 250, 580);
+
+  // Download link
+  const link = document.createElement('a');
+  link.download = `bakeout-estimate-${name.toLowerCase().replace(/\s+/g, '-')}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
 }
 
 // ══════════════════════════════════════
@@ -339,6 +476,35 @@ function updateCalc() {
       priceEl.style.opacity = '1';
       priceEl.style.transition = 'all 0.25s cubic-bezier(0.175,0.885,0.32,1.275)';
     }, 120);
+  }
+
+  // Update Size Visualizer Graph dynamically
+  const visCake = document.getElementById('visCake');
+  const visServing = document.getElementById('visServing');
+  const visDimensions = document.getElementById('visDimensions');
+
+  if (visCake && visServing && visDimensions) {
+    if (size === '½ lb') {
+      visCake.style.width = '32px';
+      visCake.style.height = '20px';
+      visServing.textContent = 'Serves 2-3 people 👥';
+      visDimensions.textContent = '4" diameter · Single layer cake';
+    } else if (size === '1 lb') {
+      visCake.style.width = '42px';
+      visCake.style.height = '28px';
+      visServing.textContent = 'Serves 4-6 people 👥';
+      visDimensions.textContent = '6" diameter · 2 layer cake';
+    } else if (size === '2 lb') {
+      visCake.style.width = '54px';
+      visCake.style.height = '38px';
+      visServing.textContent = 'Serves 8-12 people 👥';
+      visDimensions.textContent = '8" diameter · 2 layer cake';
+    } else if (size === '3 lb') {
+      visCake.style.width = '64px';
+      visCake.style.height = '48px';
+      visServing.textContent = 'Serves 15-18 people 👥';
+      visDimensions.textContent = '10" diameter · 3 layer cake';
+    }
   }
 }
 
@@ -525,16 +691,171 @@ function resetSlider() {
 
 window.addEventListener('resize', resetSlider);
 
+// Fetch dynamic menu items from Supabase Menu Table
+async function loadSupabaseMenu() {
+  if (!window.supabaseClient) return;
+  try {
+    const { data, error } = await window.supabaseClient
+      .from('menu_items')
+      .select('*');
+
+    if (error) throw error;
+    if (data && data.length > 0) {
+      // Group items by category
+      const categories = { cakes: [], fudge: [], brownies: [], cupcakes: [] };
+      data.forEach(item => {
+        if (categories[item.category]) {
+          categories[item.category].push(item);
+        }
+      });
+
+      // Render each category
+      Object.keys(categories).forEach(cat => {
+        const panel = document.getElementById(cat);
+        if (!panel) return;
+
+        let html = '';
+        categories[cat].forEach(item => {
+          let rowsHtml = '';
+          item.pricing.split('|').forEach(r => {
+            const parts = r.split(':');
+            const label = parts[0]?.trim() || '';
+            const price = parts[1]?.trim() || '';
+            rowsHtml += `<div class="mc-row"><span class="mc-lbl">${label}</span><span class="mc-price">${price}</span></div>`;
+          });
+
+          html += `
+            <div class="menu-card">
+              <div class="mc-name">${item.name}</div>
+              <div class="mc-sizes">
+                ${rowsHtml}
+              </div>
+            </div>
+          `;
+        });
+        panel.innerHTML = html;
+      });
+    }
+  } catch (err) {
+    console.warn("Supabase menu load failed, showing static defaults:", err.message);
+  }
+}
+
 // INITIALIZATION ON LOAD
-window.addEventListener('DOMContentLoaded', () => {
+function initApp() {
   // Fade out loader
   setTimeout(() => {
     const loader = document.getElementById('loader');
-    if (loader) loader.classList.add('fade-out');
+    if (loader) {
+      loader.classList.add('fade-out');
+      setTimeout(() => { loader.style.display = 'none'; }, 600);
+    }
   }, 1500);
-  
   // Load dynamic Supabase assets
   loadDynamicGallery();
   loadSupabasePricing();
   loadSupabaseReviews();
-});
+  loadSupabaseMenu();
+
+  // Override default anchor hash navigation to keep URL clean (no #home, #menu, etc.)
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const targetId = this.getAttribute('href');
+      // If there is an inline onclick, let it execute (like showGallery, showCalculator, etc.)
+      const onclickAttr = this.getAttribute('onclick');
+      if (onclickAttr && (onclickAttr.includes('showGallery') || onclickAttr.includes('showCalculator') || onclickAttr.includes('showReviews'))) {
+        return;
+      }
+      
+      e.preventDefault();
+      const targetElement = document.getElementById(targetId.substring(1));
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+}
+
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
+
+async function submitCustomInquiry(event) {
+  event.preventDefault();
+  
+  const nameInput = document.getElementById('inqName');
+  const phoneInput = document.getElementById('inqPhone');
+  const dateInput = document.getElementById('inqDate');
+  const fileInput = document.getElementById('inqFile');
+  const textInput = document.getElementById('inqText');
+  const btn = document.getElementById('inqSubmitBtn');
+
+  const name = nameInput.value.trim();
+  const phone = phoneInput.value.trim();
+  const date = dateInput.value;
+  const file = fileInput.files[0];
+  const requirements = textInput.value.trim();
+
+  if (!name || !phone || !date || !file || !requirements) {
+    alert("Please fill all fields and select a design image.");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Uploading Design & Saving...';
+
+  try {
+    if (!window.supabaseClient) throw new Error("Database offline.");
+
+    // 1. Upload file to gallery_images bucket under inquiries/ folder
+    const fileExt = file.name.split('.').pop();
+    const fileName = `inquiries/${Date.now()}.${fileExt}`;
+    
+    const { error: uploadError } = await window.supabaseClient.storage
+      .from('gallery_images')
+      .upload(fileName, file);
+
+    if (uploadError) throw uploadError;
+
+    // 2. Get Public URL
+    const { data: { publicUrl } } = window.supabaseClient.storage
+      .from('gallery_images')
+      .getPublicUrl(fileName);
+
+    // 3. Save details to database
+    const { error: dbError } = await window.supabaseClient
+      .from('custom_inquiries')
+      .insert([{
+        name,
+        phone,
+        delivery_date: date,
+        requirements,
+        image_url: publicUrl
+      }]);
+
+    if (dbError) throw dbError;
+
+    // 4. Open success modal & start redirection
+    const modal = document.getElementById('inquiry-success-modal');
+    if (modal) modal.classList.add('open');
+
+    // Reset Form
+    nameInput.value = '';
+    phoneInput.value = '';
+    dateInput.value = '';
+    fileInput.value = '';
+    textInput.value = '';
+
+    setTimeout(() => {
+      window.location.href = 'https://instagram.com/abeehas_bakeout';
+    }, 3200);
+
+  } catch (err) {
+    alert("Submission failed: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Submit Custom Inquiry ↗';
+  }
+}

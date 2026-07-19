@@ -38,11 +38,50 @@
       <button class="menu-tab active" id="tabBtn-reviews" onclick="switchTab('reviews')">💬 Moderate Reviews</button>
       <button class="menu-tab" id="tabBtn-pricing" onclick="switchTab('pricing')">💸 Calculator Prices</button>
       <button class="menu-tab" id="tabBtn-gallery" onclick="switchTab('gallery')">🖼️ Gallery Manager</button>
+      <button class="menu-tab" id="tabBtn-menu" onclick="switchTab('menu')">📜 Menu Manager</button>
+      <button class="menu-tab" id="tabBtn-inquiries" onclick="switchTab('inquiries')">📥 Inquiries</button>
     </div>
 
     <!-- REVIEWS MODERATION PANEL -->
     <div class="admin-panel active" id="panel-reviews">
       <h3 class="panel-heading">Manage Customer Feedback</h3>
+      
+      <!-- Add review form -->
+      <form id="admin-review-form" class="rv-form-wrap" onsubmit="adminAddReview(event)" style="margin: 20px 0 40px; padding: 24px;">
+        <div style="font-weight: bold; font-size: 18px; color: var(--gold-l); margin-bottom: 16px;">Add New Review Directly</div>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="rv-fields">
+            <div class="rv-field">
+              <label>Name</label>
+              <input type="text" id="adRvName" placeholder="e.g. Sana Tariq" required />
+            </div>
+            <div class="rv-field">
+              <label>City</label>
+              <input type="text" id="adRvCity" placeholder="e.g. Lahore" />
+            </div>
+          </div>
+          <div class="rv-fields">
+            <div class="rv-field">
+              <label>Stars (1 to 5)</label>
+              <input type="number" id="adRvStars" min="1" max="5" value="5" required style="background: var(--dark2); color: var(--cream); border: 1px solid var(--gold); padding: 8px; border-radius: 4px;" />
+            </div>
+            <div class="rv-field">
+              <label>Status</label>
+              <select id="adRvApproved" style="background: var(--dark2); color: var(--cream); border: 1px solid var(--gold); padding: 8px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+                <option value="true">Approved (Show on site)</option>
+                <option value="false">Pending (Moderation)</option>
+              </select>
+            </div>
+          </div>
+          <div class="rv-field" style="margin-top: 10px;">
+            <label>Review Comment</label>
+            <textarea id="adRvText" class="rv-textarea" placeholder="Type review text here..." required style="height: 80px;"></textarea>
+          </div>
+          <button type="submit" class="rv-submit" id="adRvBtn">Save Review ↗</button>
+        </div>
+      </form>
+
+      <h3 class="panel-heading" style="font-size: 18px;">Moderation List</h3>
       <div id="reviews-list-container" class="admin-list-container">
         <p>Loading reviews...</p>
       </div>
@@ -74,6 +113,10 @@
             <label>Select Image File</label>
             <input type="file" id="galleryFileInput" accept="image/*" required />
           </div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 5px;">
+            <input type="checkbox" id="newFeatured" style="width: auto; margin: 0; cursor: pointer;" />
+            <label for="newFeatured" style="margin: 0; font-size: 12px; font-weight: normal; cursor: pointer; color: var(--gold-l);">Feature on Landing Page (Highlights) 🌟</label>
+          </div>
           <button type="submit" class="rv-submit" id="uploadBtn">Upload Design ↗</button>
         </div>
       </form>
@@ -81,6 +124,53 @@
       <h3 class="panel-heading" style="font-size: 18px; margin-bottom: 16px;">Currently Uploaded Dynamic Images</h3>
       <div id="gallery-list-container" class="admin-gallery-grid">
         <p>Loading gallery items...</p>
+      </div>
+    </div>
+
+    <!-- MENU MANAGER PANEL -->
+    <div class="admin-panel" id="panel-menu">
+      <h3 class="panel-heading">Manage Menu Items</h3>
+      <p class="panel-sub">Add, edit, or delete items shown in the "Our Menu" section of the website.</p>
+      
+      <!-- Add Menu Item form -->
+      <form id="admin-menu-form" class="rv-form-wrap" onsubmit="adminAddMenuItem(event)" style="margin: 0 0 40px; padding: 24px;">
+        <div style="font-weight: bold; font-size: 18px; color: var(--gold-l); margin-bottom: 16px;">Add New Menu Item</div>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="rv-fields">
+            <div class="rv-field">
+              <label>Item Name</label>
+              <input type="text" id="adMenuName" placeholder="e.g. Red Velvet Cupcake" required />
+            </div>
+            <div class="rv-field">
+              <label>Category</label>
+              <select id="adMenuCategory" style="background: var(--dark2); color: var(--cream); border: 1px solid var(--gold); padding: 8px; border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+                <option value="cakes">Cakes 🎂</option>
+                <option value="fudge">Fudge Cakes 🍫</option>
+                <option value="brownies">Brownies 🟫</option>
+                <option value="cupcakes">Cupcakes 🧁</option>
+              </select>
+            </div>
+          </div>
+          <div class="rv-field">
+            <label>Pricing Rows (Format: Label: Rs. Price | Label: Rs. Price)</label>
+            <input type="text" id="adMenuPricing" placeholder="e.g. Pack of 3: Rs. 450 | Pack of 6: Rs. 900" required />
+          </div>
+          <button type="submit" class="rv-submit" id="adMenuBtn">Save Menu Item ↗</button>
+        </div>
+      </form>
+
+      <h3 class="panel-heading" style="font-size: 18px; margin-bottom: 16px;">Current Menu Items</h3>
+      <div id="menu-list-container" class="admin-list-container">
+        <p>Loading menu items...</p>
+      </div>
+    </div>
+
+    <!-- CUSTOM INQUIRIES PANEL -->
+    <div class="admin-panel" id="panel-inquiries">
+      <h3 class="panel-heading">Customer Inquiries</h3>
+      <p class="panel-sub">View custom designs and order requirements submitted by clients.</p>
+      <div id="inquiries-list-container" class="admin-list-container">
+        <p>Loading inquiries...</p>
       </div>
     </div>
   </div>
