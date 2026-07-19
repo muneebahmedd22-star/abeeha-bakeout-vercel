@@ -3,6 +3,8 @@
 // ══════════════════════════════════════
 
 let session = false;
+const logoImage = new Image();
+logoImage.src = '../images/logo.png';
 let reviews = [];
 let pricing = [];
 let gallery = [];
@@ -856,11 +858,22 @@ function generateInvoiceReceipt(event) {
   canvas.height = 700;
   const ctx = canvas.getContext('2d');
 
-  // Background
-  ctx.fillStyle = '#0c0c0e';
+  // Background Radial Gradient (Glow in center)
+  const grad = ctx.createRadialGradient(250, 350, 50, 250, 350, 400);
+  grad.addColorStop(0, '#19191d');
+  grad.addColorStop(1, '#08080a');
+  ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 500, 700);
 
-  // Borders Gold Accent
+  // Logo Watermark
+  if (logoImage && logoImage.complete && logoImage.naturalWidth !== 0) {
+    ctx.save();
+    ctx.globalAlpha = 0.035;
+    ctx.drawImage(logoImage, 150, 250, 200, 200);
+    ctx.restore();
+  }
+
+  // Borders Gold Accent (Double-Stroke)
   ctx.strokeStyle = '#c9a84c';
   ctx.lineWidth = 4;
   ctx.strokeRect(18, 18, 464, 664);
@@ -868,6 +881,18 @@ function generateInvoiceReceipt(event) {
   ctx.strokeStyle = 'rgba(201, 168, 76, 0.2)';
   ctx.lineWidth = 1;
   ctx.strokeRect(24, 24, 452, 652);
+
+  // Corner Ornaments
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth = 1.5;
+  // Top-Left
+  ctx.beginPath(); ctx.moveTo(35, 55); ctx.lineTo(35, 35); ctx.lineTo(55, 35); ctx.stroke();
+  // Top-Right
+  ctx.beginPath(); ctx.moveTo(465, 55); ctx.lineTo(465, 35); ctx.lineTo(445, 35); ctx.stroke();
+  // Bottom-Left
+  ctx.beginPath(); ctx.moveTo(35, 645); ctx.lineTo(35, 665); ctx.lineTo(55, 665); ctx.stroke();
+  // Bottom-Right
+  ctx.beginPath(); ctx.moveTo(465, 645); ctx.lineTo(465, 665); ctx.lineTo(445, 665); ctx.stroke();
 
   // Logo / Title
   ctx.fillStyle = '#c9a84c';
@@ -879,139 +904,164 @@ function generateInvoiceReceipt(event) {
   ctx.font = 'italic 14px Georgia';
   ctx.fillText("delight in every bite · Lahore", 250, 100);
 
-  // Divider
-  ctx.strokeStyle = 'rgba(201, 168, 76, 0.3)';
-  ctx.lineWidth = 1;
+  // Dashed Divider
+  ctx.strokeStyle = 'rgba(201, 168, 76, 0.25)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 4]);
   ctx.beginPath();
   ctx.moveTo(40, 120);
   ctx.lineTo(460, 120);
   ctx.stroke();
+  ctx.setLineDash([]); // reset
 
   // Receipt Label
   ctx.fillStyle = '#c9a84c';
-  ctx.font = 'bold 15px Montserrat, sans-serif';
+  ctx.font = 'bold 13px Montserrat, sans-serif';
   ctx.fillText("OFFICIAL ORDER RECEIPT", 250, 145);
+
+  // Customer Panel Box
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
+  ctx.fillRect(40, 165, 420, 85);
+  ctx.strokeStyle = 'rgba(201, 168, 76, 0.15)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(40, 165, 420, 85);
 
   // Client Details Panel (Left-aligned)
   ctx.textAlign = 'left';
   ctx.fillStyle = '#fdfbf7';
-  ctx.font = '13px Montserrat, sans-serif';
-  ctx.fillText(`Customer: ${clientName}`, 45, 185);
-  ctx.fillText(`Phone/WhatsApp: ${clientPhone}`, 45, 210);
-  ctx.fillText(`Date & Time: ${deliveryTime}`, 45, 235);
+  ctx.font = '12px Montserrat, sans-serif';
+  ctx.fillText(`Customer: ${clientName}`, 55, 190);
+  ctx.fillText(`Phone/WhatsApp: ${clientPhone}`, 55, 212);
+  ctx.fillText(`Date & Time: ${deliveryTime}`, 55, 234);
 
-  // Inner Divider
+  // Order Details Box
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
+  ctx.fillRect(40, 295, 420, notes ? 120 : 85);
   ctx.strokeStyle = 'rgba(201, 168, 76, 0.15)';
-  ctx.beginPath();
-  ctx.moveTo(40, 260);
-  ctx.lineTo(460, 260);
-  ctx.stroke();
+  ctx.strokeRect(40, 295, 420, notes ? 120 : 85);
 
-  // Order Details
+  // Order Details Header
   ctx.fillStyle = '#c9a84c';
-  ctx.font = 'bold 13px Montserrat, sans-serif';
-  ctx.fillText("ORDER DESCRIPTION", 45, 290);
+  ctx.font = 'bold 12px Montserrat, sans-serif';
+  ctx.fillText("ORDER DESCRIPTION", 55, 320);
 
   ctx.fillStyle = '#fdfbf7';
   ctx.font = '13px Montserrat, sans-serif';
-  ctx.fillText(`Item: ${itemName}`, 45, 320);
-  ctx.fillText(`Size / Weight: ${itemSize}`, 45, 345);
+  ctx.fillText(`Item: ${itemName}`, 55, 345);
+  ctx.fillText(`Size / Weight: ${itemSize}`, 55, 365);
   
   if (notes) {
     ctx.fillStyle = '#e8a0b4';
-    ctx.font = 'italic 12px Montserrat, sans-serif';
-    // Handle text wrap for notes (max width 400px)
+    ctx.font = 'italic 11px Montserrat, sans-serif';
+    // Handle text wrap for notes (max width 380px)
     const words = notes.split(' ');
     let line = 'Note: ';
-    let y = 375;
+    let y = 390;
     for (let n = 0; n < words.length; n++) {
       let testLine = line + words[n] + ' ';
       let metrics = ctx.measureText(testLine);
-      if (metrics.width > 400 && n > 0) {
-        ctx.fillText(line, 45, y);
+      if (metrics.width > 380 && n > 0) {
+        ctx.fillText(line, 55, y);
         line = words[n] + ' ';
-        y += 20;
+        y += 18;
       } else {
         line = testLine;
       }
     }
-    ctx.fillText(line, 45, y);
+    ctx.fillText(line, 55, y);
   }
 
   // Invoice Summary Table
-  const tableY = notes ? 440 : 400;
-  ctx.strokeStyle = 'rgba(201, 168, 76, 0.15)';
-  ctx.strokeRect(40, tableY, 420, 130);
+  const tableY = notes ? 435 : 400;
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
+  ctx.fillRect(40, tableY, 420, 120);
+  ctx.strokeStyle = 'rgba(201, 168, 76, 0.2)';
+  ctx.lineWidth = 1.2;
+  ctx.strokeRect(40, tableY, 420, 120);
 
   ctx.fillStyle = '#c9a84c';
-  ctx.font = 'bold 12px Montserrat, sans-serif';
-  ctx.fillText("BILLING SUMMARY", 50, tableY + 25);
+  ctx.font = 'bold 11px Montserrat, sans-serif';
+  ctx.fillText("BILLING SUMMARY", 50, tableY + 22);
 
   ctx.fillStyle = '#fdfbf7';
-  ctx.font = '13px Montserrat, sans-serif';
-  ctx.fillText("Order Base Price:", 50, tableY + 55);
+  ctx.font = '12px Montserrat, sans-serif';
+  ctx.fillText("Order Base Price:", 50, tableY + 48);
   ctx.textAlign = 'right';
-  ctx.fillText(`Rs. ${orderPrice.toLocaleString()}`, 450, tableY + 55);
+  ctx.fillText(`Rs. ${orderPrice.toLocaleString()}`, 450, tableY + 48);
 
   ctx.textAlign = 'left';
-  ctx.fillText("Delivery Charges:", 50, tableY + 80);
+  ctx.fillText("Delivery Charges:", 50, tableY + 70);
   ctx.textAlign = 'right';
-  ctx.fillText(`Rs. ${deliveryFee.toLocaleString()}`, 450, tableY + 80);
+  ctx.fillText(`Rs. ${deliveryFee.toLocaleString()}`, 450, tableY + 70);
 
   ctx.strokeStyle = 'rgba(201, 168, 76, 0.1)';
   ctx.beginPath();
-  ctx.moveTo(45, tableY + 95);
-  ctx.lineTo(455, tableY + 95);
+  ctx.moveTo(45, tableY + 85);
+  ctx.lineTo(455, tableY + 85);
   ctx.stroke();
 
   ctx.textAlign = 'left';
   ctx.fillStyle = '#c9a84c';
-  ctx.font = 'bold 14px Montserrat, sans-serif';
-  ctx.fillText("Total Amount:", 50, tableY + 115);
+  ctx.font = 'bold 13px Montserrat, sans-serif';
+  ctx.fillText("Total Amount:", 50, tableY + 105);
   ctx.textAlign = 'right';
-  ctx.fillText(`Rs. ${total.toLocaleString()}`, 450, tableY + 115);
+  ctx.fillText(`Rs. ${total.toLocaleString()}`, 450, tableY + 105);
 
   // Balance & Advances (Below table)
-  const footerY = tableY + 160;
+  const footerY = tableY + 155;
   ctx.textAlign = 'left';
   ctx.fillStyle = '#fdfbf7';
-  ctx.font = '13px Montserrat, sans-serif';
+  ctx.font = '12px Montserrat, sans-serif';
   ctx.fillText(`Advance Paid: Rs. ${advancePaid.toLocaleString()}`, 45, footerY);
 
   ctx.fillStyle = balance <= 0 ? '#4cc982' : '#e8a0b4';
-  ctx.font = 'bold 14px Montserrat, sans-serif';
-  ctx.fillText(`Balance Due: Rs. ${balance.toLocaleString()}`, 45, footerY + 25);
+  ctx.font = 'bold 13px Montserrat, sans-serif';
+  ctx.fillText(`Balance Due: Rs. ${balance.toLocaleString()}`, 45, footerY + 22);
 
-  // Payment Status Stamp (Glowing box on the bottom right)
-  ctx.textAlign = 'center';
-  ctx.font = 'bold 12px Montserrat, sans-serif';
-  
-  let stampBg = 'rgba(232, 160, 180, 0.15)';
+  // Payment Status Stamp (Rotated realistic double-ring stamp on the bottom right)
+  ctx.save();
+  const stampY = tableY + 165;
+  ctx.translate(370, stampY + 15);
+  ctx.rotate(-10 * Math.PI / 180); // Rotate -10 degrees
+
   let stampBorder = '#e8a0b4';
-  let stampText = 'PENDING BALANCE';
+  let stampText = 'PENDING';
 
   if (paymentStatus === 'Paid') {
-    stampBg = 'rgba(76, 201, 130, 0.15)';
     stampBorder = '#4cc982';
     stampText = 'FULLY PAID';
   } else if (paymentStatus === 'Advance Paid') {
-    stampBg = 'rgba(201, 168, 76, 0.15)';
     stampBorder = '#c9a84c';
-    stampText = 'PARTIAL ADVANCE';
+    stampText = 'PARTIAL ADV';
   }
 
-  // Draw Stamp Box
-  ctx.fillStyle = stampBg;
-  ctx.fillRect(290, footerY - 15, 170, 45);
+  // Draw double-ring circular stamp
   ctx.strokeStyle = stampBorder;
-  ctx.lineWidth = 2;
-  ctx.strokeRect(290, footerY - 15, 170, 45);
-
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(0, 0, 48, 0, 2 * Math.PI);
+  ctx.stroke();
+  
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(0, 0, 42, 0, 2 * Math.PI);
+  ctx.stroke();
+  
+  // Stamp Text inside circle
   ctx.fillStyle = stampBorder;
-  ctx.fillText(stampText, 375, footerY + 12);
+  ctx.font = 'bold 8px Montserrat, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText("ABEEHA'S BAKEOUT", 0, -18);
+  ctx.fillText("★ LAHORE ★", 0, 25);
+  
+  ctx.font = 'bold 12px Montserrat, sans-serif';
+  ctx.fillText(stampText, 0, 3);
+  
+  ctx.restore();
 
   // Footer message
-  ctx.fillStyle = 'rgba(253, 251, 247, 0.4)';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(253, 251, 247, 0.3)';
   ctx.font = 'italic 11px Georgia';
   ctx.fillText("Thank you for choosing Abeeha's Bakeout! ♡", 250, 675);
 
