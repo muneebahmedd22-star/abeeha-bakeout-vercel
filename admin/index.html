@@ -40,6 +40,7 @@
       <button class="menu-tab" id="tabBtn-gallery" onclick="switchTab('gallery')">🖼️ Gallery Manager</button>
       <button class="menu-tab" id="tabBtn-menu" onclick="switchTab('menu')">📜 Menu Manager</button>
       <button class="menu-tab" id="tabBtn-inquiries" onclick="switchTab('inquiries')">📥 Inquiries</button>
+      <button class="menu-tab" id="tabBtn-invoices" onclick="switchTab('invoices')">🧾 Receipt Generator</button>
     </div>
 
     <!-- REVIEWS MODERATION PANEL -->
@@ -172,6 +173,68 @@
       <div id="inquiries-list-container" class="admin-list-container">
         <p>Loading inquiries...</p>
       </div>
+    </div>
+
+    <!-- INVOICE GENERATOR PANEL -->
+    <div class="admin-panel" id="panel-invoices">
+      <h3 class="panel-heading">Generate Customer Receipt</h3>
+      <p class="panel-sub">Fill out the order details to generate a luxury branded receipt slip for the client.</p>
+      
+      <form id="invoice-builder-form" class="rv-form-wrap" onsubmit="generateInvoiceReceipt(event)" style="padding: 30px; margin-top: 20px;">
+        <div class="rv-fields">
+          <div class="rv-field">
+            <label>Customer Name</label>
+            <input type="text" id="invClientName" placeholder="e.g. Sana Khan" required />
+          </div>
+          <div class="rv-field">
+            <label>WhatsApp / Phone Number</label>
+            <input type="tel" id="invClientPhone" placeholder="e.g. 03001234567" required />
+          </div>
+        </div>
+        <div class="rv-fields" style="margin-top: 10px;">
+          <div class="rv-field">
+            <label>Item Name / Flavour Description</label>
+            <input type="text" id="invItemName" placeholder="e.g. Chocolate Fudge Cake" required />
+          </div>
+          <div class="rv-field">
+            <label>Size / Weight / Quantity</label>
+            <input type="text" id="invItemSize" placeholder="e.g. 2 Lbs" required />
+          </div>
+        </div>
+        <div class="rv-fields" style="margin-top: 10px;">
+          <div class="rv-field">
+            <label>Delivery / Pick-up Date & Time</label>
+            <input type="text" id="invDeliveryTime" placeholder="e.g. 25th July · Afternoon 3 PM" required />
+          </div>
+          <div class="rv-field">
+            <label>Payment Status</label>
+            <select id="invPaymentStatus" style="padding: 10px; background: var(--dark2); color: var(--cream); border: 1px solid var(--gold); border-radius: 4px; font-family: 'Montserrat', sans-serif;">
+              <option value="Paid">Paid ✅</option>
+              <option value="Advance Paid">Advance Paid ⏳</option>
+              <option value="Pending">Pending ❌</option>
+            </select>
+          </div>
+        </div>
+        <div class="rv-fields" style="margin-top: 10px;">
+          <div class="rv-field">
+            <label>Order Price (Rs.)</label>
+            <input type="number" id="invOrderPrice" placeholder="e.g. 2800" required />
+          </div>
+          <div class="rv-field">
+            <label>Delivery Charges (Rs.)</label>
+            <input type="number" id="invDeliveryFee" placeholder="e.g. 250" value="0" required />
+          </div>
+          <div class="rv-field">
+            <label>Advance Paid (Rs.)</label>
+            <input type="number" id="invAdvancePaid" placeholder="e.g. 1000" value="0" required />
+          </div>
+        </div>
+        <div class="rv-field" style="margin-top: 15px;">
+          <label>Special Instructions / Custom Notes</label>
+          <textarea id="invNotes" class="rv-textarea" placeholder="e.g. Write 'Happy Birthday Sarah' in pink cursive, add flower toppers..." style="height: 80px;"></textarea>
+        </div>
+        <button type="submit" class="rv-submit" style="margin-top: 20px; font-weight: bold;">Generate & Download Receipt 🧾</button>
+      </form>
     </div>
   </div>
 

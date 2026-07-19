@@ -831,3 +831,199 @@ async function deleteInquiry(id, imageUrl) {
     alert('Delete failed: ' + err.message);
   }
 }
+
+// ------------------ ADMIN RECEIPT GENERATOR ------------------
+function generateInvoiceReceipt(event) {
+  event.preventDefault();
+
+  const clientName = document.getElementById('invClientName').value.trim();
+  const clientPhone = document.getElementById('invClientPhone').value.trim();
+  const itemName = document.getElementById('invItemName').value.trim();
+  const itemSize = document.getElementById('invItemSize').value.trim();
+  const deliveryTime = document.getElementById('invDeliveryTime').value.trim();
+  const paymentStatus = document.getElementById('invPaymentStatus').value;
+  const orderPrice = parseFloat(document.getElementById('invOrderPrice').value) || 0;
+  const deliveryFee = parseFloat(document.getElementById('invDeliveryFee').value) || 0;
+  const advancePaid = parseFloat(document.getElementById('invAdvancePaid').value) || 0;
+  const notes = document.getElementById('invNotes').value.trim();
+
+  const total = orderPrice + deliveryFee;
+  const balance = total - advancePaid;
+
+  // Create canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = 500;
+  canvas.height = 700;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#0c0c0e';
+  ctx.fillRect(0, 0, 500, 700);
+
+  // Borders Gold Accent
+  ctx.strokeStyle = '#c9a84c';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(18, 18, 464, 664);
+  
+  ctx.strokeStyle = 'rgba(201, 168, 76, 0.2)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(24, 24, 452, 652);
+
+  // Logo / Title
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = 'bold 26px Georgia';
+  ctx.textAlign = 'center';
+  ctx.fillText("Abeeha's Bakeout", 250, 75);
+
+  ctx.fillStyle = '#e8a0b4';
+  ctx.font = 'italic 14px Georgia';
+  ctx.fillText("delight in every bite · Lahore", 250, 100);
+
+  // Divider
+  ctx.strokeStyle = 'rgba(201, 168, 76, 0.3)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(40, 120);
+  ctx.lineTo(460, 120);
+  ctx.stroke();
+
+  // Receipt Label
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = 'bold 15px Montserrat, sans-serif';
+  ctx.fillText("OFFICIAL ORDER RECEIPT", 250, 145);
+
+  // Client Details Panel (Left-aligned)
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#fdfbf7';
+  ctx.font = '13px Montserrat, sans-serif';
+  ctx.fillText(`Customer: ${clientName}`, 45, 185);
+  ctx.fillText(`Phone/WhatsApp: ${clientPhone}`, 45, 210);
+  ctx.fillText(`Date & Time: ${deliveryTime}`, 45, 235);
+
+  // Inner Divider
+  ctx.strokeStyle = 'rgba(201, 168, 76, 0.15)';
+  ctx.beginPath();
+  ctx.moveTo(40, 260);
+  ctx.lineTo(460, 260);
+  ctx.stroke();
+
+  // Order Details
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = 'bold 13px Montserrat, sans-serif';
+  ctx.fillText("ORDER DESCRIPTION", 45, 290);
+
+  ctx.fillStyle = '#fdfbf7';
+  ctx.font = '13px Montserrat, sans-serif';
+  ctx.fillText(`Item: ${itemName}`, 45, 320);
+  ctx.fillText(`Size / Weight: ${itemSize}`, 45, 345);
+  
+  if (notes) {
+    ctx.fillStyle = '#e8a0b4';
+    ctx.font = 'italic 12px Montserrat, sans-serif';
+    // Handle text wrap for notes (max width 400px)
+    const words = notes.split(' ');
+    let line = 'Note: ';
+    let y = 375;
+    for (let n = 0; n < words.length; n++) {
+      let testLine = line + words[n] + ' ';
+      let metrics = ctx.measureText(testLine);
+      if (metrics.width > 400 && n > 0) {
+        ctx.fillText(line, 45, y);
+        line = words[n] + ' ';
+        y += 20;
+      } else {
+        line = testLine;
+      }
+    }
+    ctx.fillText(line, 45, y);
+  }
+
+  // Invoice Summary Table
+  const tableY = notes ? 440 : 400;
+  ctx.strokeStyle = 'rgba(201, 168, 76, 0.15)';
+  ctx.strokeRect(40, tableY, 420, 130);
+
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = 'bold 12px Montserrat, sans-serif';
+  ctx.fillText("BILLING SUMMARY", 50, tableY + 25);
+
+  ctx.fillStyle = '#fdfbf7';
+  ctx.font = '13px Montserrat, sans-serif';
+  ctx.fillText("Order Base Price:", 50, tableY + 55);
+  ctx.textAlign = 'right';
+  ctx.fillText(`Rs. ${orderPrice.toLocaleString()}`, 450, tableY + 55);
+
+  ctx.textAlign = 'left';
+  ctx.fillText("Delivery Charges:", 50, tableY + 80);
+  ctx.textAlign = 'right';
+  ctx.fillText(`Rs. ${deliveryFee.toLocaleString()}`, 450, tableY + 80);
+
+  ctx.strokeStyle = 'rgba(201, 168, 76, 0.1)';
+  ctx.beginPath();
+  ctx.moveTo(45, tableY + 95);
+  ctx.lineTo(455, tableY + 95);
+  ctx.stroke();
+
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = 'bold 14px Montserrat, sans-serif';
+  ctx.fillText("Total Amount:", 50, tableY + 115);
+  ctx.textAlign = 'right';
+  ctx.fillText(`Rs. ${total.toLocaleString()}`, 450, tableY + 115);
+
+  // Balance & Advances (Below table)
+  const footerY = tableY + 160;
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#fdfbf7';
+  ctx.font = '13px Montserrat, sans-serif';
+  ctx.fillText(`Advance Paid: Rs. ${advancePaid.toLocaleString()}`, 45, footerY);
+
+  ctx.fillStyle = balance <= 0 ? '#4cc982' : '#e8a0b4';
+  ctx.font = 'bold 14px Montserrat, sans-serif';
+  ctx.fillText(`Balance Due: Rs. ${balance.toLocaleString()}`, 45, footerY + 25);
+
+  // Payment Status Stamp (Glowing box on the bottom right)
+  ctx.textAlign = 'center';
+  ctx.font = 'bold 12px Montserrat, sans-serif';
+  
+  let stampBg = 'rgba(232, 160, 180, 0.15)';
+  let stampBorder = '#e8a0b4';
+  let stampText = 'PENDING BALANCE';
+
+  if (paymentStatus === 'Paid') {
+    stampBg = 'rgba(76, 201, 130, 0.15)';
+    stampBorder = '#4cc982';
+    stampText = 'FULLY PAID';
+  } else if (paymentStatus === 'Advance Paid') {
+    stampBg = 'rgba(201, 168, 76, 0.15)';
+    stampBorder = '#c9a84c';
+    stampText = 'PARTIAL ADVANCE';
+  }
+
+  // Draw Stamp Box
+  ctx.fillStyle = stampBg;
+  ctx.fillRect(290, footerY - 15, 170, 45);
+  ctx.strokeStyle = stampBorder;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(290, footerY - 15, 170, 45);
+
+  ctx.fillStyle = stampBorder;
+  ctx.fillText(stampText, 375, footerY + 12);
+
+  // Footer message
+  ctx.fillStyle = 'rgba(253, 251, 247, 0.4)';
+  ctx.font = 'italic 11px Georgia';
+  ctx.fillText("Thank you for choosing Abeeha's Bakeout! ♡", 250, 675);
+
+  // Convert to image download
+  try {
+    const link = document.createElement('a');
+    link.download = `slip-${clientName.toLowerCase().replace(/\s+/g, '-')}.png`;
+    link.href = canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (err) {
+    alert("Could not download receipt image: " + err.message);
+  }
+}
