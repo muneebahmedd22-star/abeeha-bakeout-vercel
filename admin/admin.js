@@ -852,11 +852,15 @@ function generateInvoiceReceipt(event) {
   const total = orderPrice + deliveryFee;
   const balance = total - advancePaid;
 
-  // Create canvas
+  // Create canvas with 3x high-definition scale (1500x2100 pixels)
+  const scaleFactor = 3;
   const canvas = document.createElement('canvas');
-  canvas.width = 500;
-  canvas.height = 700;
+  canvas.width = 500 * scaleFactor;
+  canvas.height = 700 * scaleFactor;
   const ctx = canvas.getContext('2d');
+  
+  // Scale the rendering context to make text and graphics razor sharp
+  ctx.scale(scaleFactor, scaleFactor);
 
   // Background Radial Gradient (Glow in center)
   const grad = ctx.createRadialGradient(250, 350, 50, 250, 350, 400);
